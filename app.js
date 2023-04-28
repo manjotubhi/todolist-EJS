@@ -11,7 +11,7 @@ app.set('view engine', 'ejs');
 app.get('/', (req, res) => {
     const today = new Date();
     const currentDay = today.getDay();
-    const day = "";
+    let day = "";
 
 
     switch (currentDay) {
