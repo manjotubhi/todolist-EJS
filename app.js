@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser');
 let items = ["Buy Food", "Cook Food", "Eat Food"];
+let workList = [];
 // let ejs = require('ejs');
 const app = express()
 const port = 3000
@@ -21,19 +22,40 @@ app.get('/', (req, res) => {
     let day = today.toLocaleDateString("en-US", options)
 
     res.render('list', {
-        kindOfDay: day,
+        listTitle: day,
         newListItems: items
     });
 })
 
 app.post('/', (req, res) => {
+
+    console.log(req.body)
     let item = req.body.newItem;
 
-    items.push(item);
+    if (req.body.list === "Work List") {
+        workList.push(item)
+        res.redirect("/work")
+    } else {
 
-    res.redirect("/");
+        items.push(item);
+        res.redirect("/");
+    }
+
+
 });
 
+app.get('/work', (req, res) => {
+    res.render("list", {
+        listTitle: "Work List",
+        newListItems: workList
+    })
+})
+
+app.post("/work", (req, res) => {
+    let item = req.body.newItem;
+    workList.push(item);
+    res.redirect("/work")
+})
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
